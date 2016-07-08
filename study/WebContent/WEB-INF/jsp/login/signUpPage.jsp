@@ -11,8 +11,10 @@
 	<fieldset>
 		<legend>JSP & Servlet Study Community - 회원가입</legend>
 		<form action="/Account/SignUpCheck" method="post" id="signUp">
+		
 			아이디 : <input type="text" name="m_id"><br/>
 			패스워드 : <input type="password" name="m_pw"><br/>
+			패스워드확인 : <input type="password" name="m_pwChk" ><br/>
 			이름 : <input type="text" name="m_name" placeholder="ex)Sara"><br/>
 			나이 : <input type="number" name="m_age"/><br/>
 			성별 : <input type="radio" name="m_gender" value="남자" checked="checked"/> 남자 
@@ -20,64 +22,55 @@
 			자기소개 : <textarea rows="4" cols="30" name="m_introduce">간단히 자기 소개 부탁드립니다.</textarea><br/>
 			<input type="submit" value="확인"/><br/>
 			<input type="reset" value="다시 작성"/>
+		
 		</form>
 	</fieldset>
 	
 	<!-- jQuery로 폼 값 유효성 체크 -->
 	<script type="text/javascript" src="/asset/jQuery/jquery-3.0.0.min.js"></script>
+	<script type="text/javascript" src="/asset/jQuery/jquery.validate.min.js"></script>
 	<script>
-		$(function(){
-			$('#signUp').submit(function(){
-			var id = $('input[name="m_id"]').val();										// 아이디
-				var pw = $('input[name="m_pw"]').val();								// 패스워드
-				var name = $('input[name="m_name"]').val();						// 이름
-				var age = $('input[name="m_age"]').val();							// 나이
-				var introduce = $('textarea[name="m_introduce"]').val();		// 자기소개
-				
-				if( !id ){
-					alert("아이디를 입력하세요");
-					return false;
+		$().ready(function(){
+			$('#signUp').validate({
+				onfocusout : false,
+				rules : {
+					m_id :{ required : true, rangelength : [2, 40]},
+					m_pw : {required : true, rangelength : [5, 20] },
+					m_pwChk : {required : true, rangelength : [5, 20], equalTo : '#m_pw'},
+					m_name : { required : true, rangelength : [1, 20]},
+					m_age : {required : true, range : [1, 120]},
+					m_introduce : {required : true, rangelength : [1, 100]}
+				},
+				messages : {
+					m_id : {
+						required : "아이디를 입력하세요.", 
+						rangelength : $.validator.format('아이디는 최소 2자에서 최대 40자 까지입니다.')
+						},
+					m_pw : { 
+						required : "비밀번호를 입력하세요.", 
+						rangelength : $.validator.format('비밀번호는 최소 5자에서 최대 20자 까지입니다.')
+						},
+					m_pwChk : {
+						required : "비밀번호 확인란을 입력하세요.", 
+						rangelength : $.validator.format('비밀번호 확인란은 최소 5자에서 최대 20자까지입니다.'), 
+						equalTo : '비밀번호 항목과 일치하지 않습니다.'
+						},
+					m_name : {
+						required : "이름을 입력하세요",
+						rangelength : $.validator.format('이름은 최소 1자에서 최대 20자까지입니다.')
+					},
+					m_age : {
+						required : "나이를 입력해주세요",
+						range : $.validator.format("120살 까지 입력이 가능합니다.")
+					},
+					m_introduce : {
+						required : "자기소개를 입력해주세요",
+						rangelength : $.validator.format("자기소개는 최소 1자에서 100자까지입니다.")
+					}
 				}
-				if( id.length > 40){
-					alert("아이디는 40글자제한입니다.");
-					return false;
-				}
-				if( !pw ){
-					alert("비밀번호를 입력하세요");
-					return false;
-				}
-				if( pw.length > 20){
-					alert("비밀번호는 20글자제한입니다.");
-					return false;
-				}
-				
-				if( !name ){
-					alert("이름을 입력하세요");
-					return false;
-				}
-				if( name.length > 20){
-					alert("이름은 20글자제한입니다.");
-					return false;
-				}
-				if( !age ){
-					alert("나이를 입력하세요");
-					return false;
-				}
-				if( age.length > 3){
-					alert("나이는100살제한입니다.");
-					return false;
-				}
-				if( !introduce ){
-					alert("자기소개를 입력하세요");
-					return false;
-				}
-				if( introduce.length > 100){
-					alert("자기소개는 100글자제한입니다.");
-					return false;
-				}
-				
 			});
 		});
+		
 	</script>
 	
 </body>
